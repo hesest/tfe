@@ -278,10 +278,11 @@ public class HomeView extends VerticalLayout implements BeforeEnterObserver {
                     }
                 }
             }
+            StringBuilder string = new StringBuilder();
             for (MarketEntity market : markets) {
-                System.out.println("Magasin : " + market.getName() + " (" + market.getAddressLatitude() + "," + market.getAddressLongitude() + ")");
+                string.append("/").append(market.getAddressLatitude()).append(",").append(market.getAddressLongitude());
             }
-            UI.getCurrent().getPage().open("https://www.google.com/maps/dir/'" + user.getStartAddressLatitude() + "," + user.getStartAddressLongitude() + "'/'" + markets.get(0).getAddressLatitude() + "," + markets.get(0).getAddressLongitude() + "'", "_blank");
+            UI.getCurrent().getPage().open("https://www.google.com/maps/dir/" + user.getStartAddressLatitude() + "," + user.getStartAddressLongitude() + string, "_blank");
         });
 
         // Ajouter les éléments à la vue
