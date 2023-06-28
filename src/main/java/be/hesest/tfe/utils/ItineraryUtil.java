@@ -65,7 +65,7 @@ public class ItineraryUtil {
     private static List<List<Double>> getItinerary(String transportMode, double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         try {
             // Appel de l'API OpenRouteService pour récupérer l'itinéraire
-            String response = new RestTemplate().getForObject("https://api.openrouteservice.org/v2/directions/" + transportMode + "?api_key=" + openRouteServiceApiKey + "&start=" + startLongitude + "," + startLatitude + "&end=" + endLongitude + "," + endLatitude + "&format=geojson&geometry_format=geojson", String.class);
+            String response = new RestTemplate().getForObject("https://api.openrouteservice.org/v2/directions/" + transportMode + "?api_key=" + openRouteServiceApiKey + "&start=" + startLongitude + "," + startLatitude + "&end=" + endLongitude + "," + endLatitude, String.class);
 
             // Récupération de la liste des points le long de l'itinéraire
             JsonNode rootNode = new ObjectMapper().readTree(response);
@@ -81,7 +81,7 @@ public class ItineraryUtil {
             firstCoordinate.add(coordinatesNode.get(0).get(0).asDouble());
             result.add(firstCoordinate);
 
-            // Parcours de la ligne géométrique pour récupérer les coordonnées tous les 1 km
+            // Parcours de la ligne géométrique pour récupérer les coordonnées tous les 1 kilomètre
             for (int i = 1; i < coordinatesNode.size(); i++) {
                 double latitude = coordinatesNode.get(i).get(1).asDouble();
                 double longitude = coordinatesNode.get(i).get(0).asDouble();

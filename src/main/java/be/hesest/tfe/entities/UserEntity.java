@@ -13,7 +13,9 @@ public class UserEntity {
     private String password;
     private String name;
     private Long creationDate;
+    @Column(columnDefinition = "LONGTEXT")
     private String availableMarkets;
+    @Column(columnDefinition = "LONGTEXT")
     private String shoppingList;
     private String startAddressStreet;
     private String startAddressNumber;

@@ -155,7 +155,7 @@ public class SettingsView extends VerticalLayout implements BeforeEnterObserver 
             List<Double> endCoordinate = ItineraryUtil.getCoordinates(endStreet.getValue() + " " + endNumber.getValue() + " " + endCity.getValue() + " " + endPostalCode.getValue() + " " + user.getEndAddressCountry());
             if (!startCoordinate.isEmpty() && !endCoordinate.isEmpty()) {
                 TransportModeUnit transportMode = TransportModeUnit.findByName(transportModeRadio.getValue());
-                List<MarketEntity> markets = ItineraryUtil.findMarkets(transportMode.getName(), startCoordinate.get(0), startCoordinate.get(1), endCoordinate.get(0), endCoordinate.get(1));
+                List<MarketEntity> markets = ItineraryUtil.findMarkets(transportMode.getOpenRouteServiceName(), startCoordinate.get(0), startCoordinate.get(1), endCoordinate.get(0), endCoordinate.get(1));
                 user.setAvailableMarkets(ConverterUtil.convertListToString(markets.stream().map(MarketEntity::getId).toList()));
                 user.setStartAddressStreet(startStreet.getValue());
                 user.setStartAddressNumber(startNumber.getValue());

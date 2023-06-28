@@ -219,11 +219,23 @@ public class HomeView extends VerticalLayout implements BeforeEnterObserver {
             Icon checkIcon = VaadinIcon.CHECK.create();
             checkIcon.setColor("green");
             Button checkButton = new Button(checkIcon);
-            checkButton.addClickListener(event -> {});
+            checkButton.addClickListener(event -> {
+                Map<String, Integer> shoppingList = ConverterUtil.convertStringToMap(user.getShoppingList());
+                shoppingList.remove(price.getKey().getProduct().getId());
+                user.setShoppingList(ConverterUtil.convertMapToString(shoppingList));
+                userRepository.save(user);
+                UI.getCurrent().getPage().reload();
+            });
             Icon trashIcon = VaadinIcon.TRASH.create();
             trashIcon.setColor("red");
             Button trashButton = new Button(trashIcon);
-            trashButton.addClickListener(event -> {});
+            trashButton.addClickListener(event -> {
+                Map<String, Integer> shoppingList = ConverterUtil.convertStringToMap(user.getShoppingList());
+                shoppingList.remove(price.getKey().getProduct().getId());
+                user.setShoppingList(ConverterUtil.convertMapToString(shoppingList));
+                userRepository.save(user);
+                UI.getCurrent().getPage().reload();
+            });
             layout.add(checkButton, trashButton);
             layout.setJustifyContentMode(JustifyContentMode.END);
             return layout;
@@ -268,21 +280,24 @@ public class HomeView extends VerticalLayout implements BeforeEnterObserver {
         itineraryButton.addClickListener(event -> {
             List<MarketEntity> markets = new ArrayList<>();
             List<String> marketsId = ConverterUtil.convertStringToList(user.getAvailableMarkets());
-            for (PriceModel price : prices.keySet()) {
-                for (String marketId : marketsId) {
-                    if (MarketsManager.getMarkets().containsKey(marketId) && MarketsManager.getMarkets().get(marketId).getName().equals(price.getProduct().getMarketName())) {
-                        MarketEntity market = MarketsManager.getMarkets().get(marketId);
-                        if (!markets.contains(market)) {
-                            markets.add(market);
+            for (String marketId : marketsId) {
+                if (MarketsManager.getMarkets().containsKey(marketId)) {
+                    MarketEntity market = MarketsManager.getMarkets().get(marketId);
+                    if (markets.stream().filter(marketForName -> marketForName.getName().equals(market.getName())).toList().isEmpty()) {
+                        for (PriceModel price : prices.keySet()) {
+                            if (market.getName().equals(price.getProduct().getMarketName())) {
+                                markets.add(market);
+                            }
                         }
                     }
                 }
             }
             StringBuilder string = new StringBuilder();
             for (MarketEntity market : markets) {
+                System.out.println(market.getName());
                 string.append("/").append(market.getAddressLatitude()).append(",").append(market.getAddressLongitude());
             }
-            UI.getCurrent().getPage().open("https://www.google.com/maps/dir/" + user.getStartAddressLatitude() + "," + user.getStartAddressLongitude() + string, "_blank");
+            UI.getCurrent().getPage().open("https://www.google.com/maps/dir/" + user.getStartAddressLatitude() + "," + user.getStartAddressLongitude() + string + "/" + user.getEndAddressLatitude() + "," + user.getEndAddressLongitude(), "_blank");
         });
 
         // Ajouter les éléments à la vue

@@ -18,7 +18,7 @@ public class ProductEntity {
     private Float quantity;
     private String barCode;
     private String marketName;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String marketLink;
     @Lob
     @Column(columnDefinition = "LONGBLOB")

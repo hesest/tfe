@@ -79,18 +79,22 @@ public class SignUpView extends VerticalLayout implements BeforeEnterObserver {
         submitButton.addClickListener(event -> {
             // Validation de l'email
             if (emailField.getValue().matches("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")) {
-                // Cryptage du mot de passe
-                try {
-                    String password = CryptionUtil.encrypt(passwordField.getValue());
-                    // Créer l'utilisateur
-                    UserEntity user = new UserEntity(emailField.getValue(), password, nameField.getValue(), System.currentTimeMillis(), "", "", "", "", "", "", "Belgique", null, null, "", "", "", "", "Belgique", null, null, TransportModeUnit.DRIVING_CAR);
-                    userRepository.save(user);
-                    // Définir les cookies
-                    CookiesUtil.setCookies(user.getEmail(), user.getPassword());
-                    Notification.show("Vous avez été connecté avec succès");
-                    UI.getCurrent().getPage().reload();
-                } catch (NoSuchAlgorithmException e) {
-                    Notification.show("Une erreur s'est produite");
+                if (!userRepository.existsByEmail(emailField.getValue())) {
+                    // Cryptage du mot de passe
+                    try {
+                        String password = CryptionUtil.encrypt(passwordField.getValue());
+                        // Créer l'utilisateur
+                        UserEntity user = new UserEntity(emailField.getValue(), password, nameField.getValue(), System.currentTimeMillis(), "", "", "", "", "", "", "Belgique", null, null, "", "", "", "", "Belgique", null, null, TransportModeUnit.DRIVING_CAR);
+                        userRepository.save(user);
+                        // Définir les cookies
+                        CookiesUtil.setCookies(user.getEmail(), user.getPassword());
+                        Notification.show("Vous avez été connecté avec succès");
+                        UI.getCurrent().getPage().reload();
+                    } catch (NoSuchAlgorithmException e) {
+                        Notification.show("Une erreur s'est produite");
+                    }
+                } else {
+                    Notification.show("Cet email existe déjà");
                 }
             } else {
                 Notification.show("Votre email n'est pas valide");
