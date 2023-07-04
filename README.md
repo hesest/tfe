@@ -1,4 +1,5 @@
 # tfe
+Travail de fin d'études
 
 Pour lancer, ne pas oublier de créer un fichier `application.properties` dans un dossier `resources` avec les éléments suivants :
 ```
